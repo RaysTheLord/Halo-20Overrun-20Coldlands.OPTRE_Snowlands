@@ -90,6 +90,8 @@ if (isServer) then {
 
 			} forEach _opticsModes;
 			
+            //Remove optics check for Halo
+            /*
 			if ("NVG" in _visionModes) then {
 				//diag_log format ["%1 has NVG in one of the optics modes: ", configName (_x)];
 				_dontAdd = true;
@@ -98,6 +100,7 @@ if (isServer) then {
 				//diag_log format ["%1 has Ti in one of the optics modes: ", configName (_x)];
 				_dontAdd = true;
 			};
+            */
 			
 		};
 		
@@ -193,7 +196,7 @@ if (isServer) then {
 	publicVariable "ArsenalWeapons";
 
 	//if NVGs have been unlocked, append all NVG items to the arsenal loader
-	if(UnlockTracker select 2 == true) then {
+	if(true) then {
 		diag_log "NVGs are unlocked. Adding to Arsenal Items";
 		ArsenalItems append _NVGItems;
 	} else {
@@ -234,16 +237,29 @@ if (didJIP) then {
 	waitUntil{ !isNull arsenalBox};
 	waitUntil{ !isNull deconTruck};
 
-//add all items to arsenalBox
-[arsenalBox,ArsenalItems,true,true] call BIS_fnc_addVirtualItemCargo;
-[arsenalBox,ArsenalBackpacks,true,true] call BIS_fnc_addVirtualBackpackCargo;
-[arsenalBox,ArsenalWeapons,true,true] call BIS_fnc_addVirtualWeaponCargo;
-[arsenalBox,ArsenalMagazines,true,true] call BIS_fnc_addVirtualMagazineCargo;
+if (isClass (configfile >> "CfgPatches" >> "ace_common")) then {
+    _allowed_items = [];
+    _allowed_items append ArsenalItems;
+    _allowed_items append ArsenalBackpacks;
+    _allowed_items append ArsenalWeapons;
+    _allowed_items append ArsenalMagazines;
+    
+    sleep 1;
+    
+    [arsenalBox, _allowed_items, true] call ace_arsenal_fnc_initBox;
+    [deconTruck, _allowed_items, true] call ace_arsenal_fnc_initBox;
+} else {
+    //add all items to arsenalBox
+    [arsenalBox,ArsenalItems,true,true] call BIS_fnc_addVirtualItemCargo;
+    [arsenalBox,ArsenalBackpacks,true,true] call BIS_fnc_addVirtualBackpackCargo;
+    [arsenalBox,ArsenalWeapons,true,true] call BIS_fnc_addVirtualWeaponCargo;
+    [arsenalBox,ArsenalMagazines,true,true] call BIS_fnc_addVirtualMagazineCargo;
 
-sleep 1;
+    sleep 1;
 
-//add all items to deconTruck
-[deconTruck,ArsenalItems,true,true] call BIS_fnc_addVirtualItemCargo;
-[deconTruck,ArsenalBackpacks,true,true] call BIS_fnc_addVirtualBackpackCargo;
-[deconTruck,ArsenalWeapons,true,true] call BIS_fnc_addVirtualWeaponCargo;
-[deconTruck,ArsenalMagazines,true,true] call BIS_fnc_addVirtualMagazineCargo;
+    //add all items to deconTruck
+    [deconTruck,ArsenalItems,true,true] call BIS_fnc_addVirtualItemCargo;
+    [deconTruck,ArsenalBackpacks,true,true] call BIS_fnc_addVirtualBackpackCargo;
+    [deconTruck,ArsenalWeapons,true,true] call BIS_fnc_addVirtualWeaponCargo;
+    [deconTruck,ArsenalMagazines,true,true] call BIS_fnc_addVirtualMagazineCargo;
+};
