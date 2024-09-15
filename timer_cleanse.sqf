@@ -24,7 +24,7 @@ while{CleanseActive} do {
 		//[""] remoteExec ["hintSilent", 0];
 		
 		//inform the user
-		titleText ["DECON Vehicle destroyed. Area is not decontaminated...", "PLAIN"];
+		titleText ["DECON Vehicle destroyed. Flood attraction halted.", "PLAIN"];
 		CleanseActive = false;		
 		
 	}else { // if truck is not destroyed, check if timer is complete
@@ -35,11 +35,11 @@ while{CleanseActive} do {
 		if ( _timeLeft <= 0) then {
 			
 			//inform the User
-			titleText[format ["Area %1 successfully decontaminated.", _location], "PLAIN"];
+			titleText[format ["All Flood forms uprooted from Area %1.", _location], "PLAIN"];
 			CleanseActive = false;			
 		
 		} else{//if timer is not complete, update hintSilent
-			hintSilent format ["%1 until DECON", floor _timeLeft];
+			hintSilent format ["ETA: %1 seconds until all Flood forms active.", floor _timeLeft];
 		
 		};//end else
 	

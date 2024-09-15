@@ -43,7 +43,7 @@ if(_nearLoc isEqualTo "") then {
 	} else {
 		// Else, check if infection rate is below 10%
 		if((ZoneArray select _locIndex select 2) > 0.1) then {
-			titleText ["The infection is still too strong in this area.\nClear more infected from the area!", "PLAIN"];
+			titleText ["The Flood are already agitated.\nClear more of them from the area!", "PLAIN"];
 		} else {
 			
 			if(isServer) then {
@@ -55,7 +55,7 @@ if(_nearLoc isEqualTo "") then {
 				private _locIndex = _this select 0;
 				private _nearLoc = _this select 1;
 				
-				[[_nearLoc,300,"Beginning DECON Process... Please Hold...."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+				[[_nearLoc,300,"Attracting Flood forms... Please Hold...."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 				sleep 5;
 				
 				if(isServer) then {
@@ -68,7 +68,7 @@ if(_nearLoc isEqualTo "") then {
 						_decon addVehicle deconTruck; 
 						deconTruck lock true;
 						deconTruck lockDriver true;
-						_deconMan = _decon createUnit ["B_Survivor_F", getPos deconTruck,[],5, "NONE"];
+						_deconMan = _decon createUnit ["OPTRE_FC_Marines_Soldier_Unarmed", getPos deconTruck,[],5, "NONE"];
 						[_deconMan] orderGetIn true;
 						_deconMan disableAI "all";
 						_deconMan setBehaviour "CARELESS";

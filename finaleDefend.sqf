@@ -37,7 +37,7 @@ while{FinalePhase == 3} do {
 			_zombieControl = true;
 			
 			//warn players
-			[["finaleDefend",300,"We have to clear out those zombies or they'll overwhelm the machine!"],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];			
+			[["finaleDefend",300,"We have to clear out the Flood or they'll overwhelm the machine!"],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];			
 			
 			//log
 			diag_log format ["Zombies own the defend area. Stopping timer at %1 and starting %2 timer to clear zone", _finaleTimer, _defendTime];
@@ -50,7 +50,7 @@ while{FinalePhase == 3} do {
 		if (_loopCount % 10 == 0 && _loopCount > 0) then { //Warn every 10 seconds
 			_timeleft = _defendTime - _loopCount;
 			
-			[["finaleDefend",300,format ["We only have %1 seconds left to clear the zombies!", _timeleft]],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+			[["finaleDefend",300,format ["We only have %1 seconds left to clear the Flood!", _timeleft]],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 		
 		};
 		

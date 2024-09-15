@@ -24,19 +24,16 @@ if(isServer) then {
 	//create marker
 	createMarker ["littleBirdMarker",littleBird];
 	"littleBirdMarker" setMarkerType "mil_triangle";
-	"littleBirdMarker" setMarkerText "Little Bird";
+	"littleBirdMarker" setMarkerText "Falcon";
 	"littleBirdMarker" setMarkerAlpha 0.7;
 	
 	//update marker
 	execVM "littleBirdMarker.sqf";
 
 	//add decon action to heli
-	[littleBird,["Airborne DECON", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","LittleBirdArmed == true",5,false,"",""]] remoteExec ["addAction",0];
-	[littleBird,["Rearm Decontaminate", {["rearmLittleBird.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","LittleBirdArmed == false",5,false,"",""]] remoteExec ["addAction",0];
-	//["littleBirdRemoveActions.sqf"] remoteExec ["BIS_fnc_execVM",0];
+	[littleBird,["Attract Flood", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","LittleBirdArmed == true",5,false,"",""]] remoteExec ["addAction",0];
+	[littleBird,["Rearm Flood Attractors", {["rearmLittleBird.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","LittleBirdArmed == false",5,false,"",""]] remoteExec ["addAction",0];
 	sleep 0.5;
-	//[[LittleBirdArmed],"littleBirdAddAction.sqf"] remoteExec ["BIS_fnc_execVM",0];
-	//[LittleBirdArmed] remoteExec ["littleBirdAddAction.sqf",0];
 	
 	//log
 	diag_log "** littleBird has been unlocked.";

@@ -15,10 +15,10 @@ if(isServer) then {
 		["techDestroyed.sqf"] remoteExec ["BIS_fnc_execVM",2]
 	}]] remoteExec ["addEventHandler",0];
 
-		//create marker
+    //create marker
 	createMarker ["techMarker",techTruck];
 	"techMarker" setMarkerType "mil_triangle";
-	"techMarker" setMarkerText "Technical";
+	"techMarker" setMarkerText "Armed Truck";
 	"techMarker" setMarkerAlpha 0.7;
 	
 	//update marker

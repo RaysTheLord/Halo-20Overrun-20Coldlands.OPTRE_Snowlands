@@ -25,19 +25,14 @@ if(isServer) then {
 
 	//if null, this is not near location
 	if(_nearLoc isEqualTo "") then {
-		//titleText ["The helicopter must be within 100 meters of an infection center.", "PLAIN"];
 		[["littleBirdMarker",200,"The helicopter must be within 100 meters of a Flood infection center."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
-		//add action back to heli
-		//[littleBird,["Airborne DECON", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",2];},nil,1.5,FALSE,true,"","true",5,false,"",""]] remoteExec ["addAction",0];
-		//[littleBird,["Airborne DECON", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","true",5,false,"",""]] remoteExec ["addAction",-2];
-		//[[LittleBirdArmed],"littleBirdAddAction.sqf"] remoteExec ["BIS_fnc_execVM",0];
 		
 	} else {
 		// Check if area is still infected
 		//if (isInfected select _locIndex == false) then {
 		if (ZoneArray select _locIndex select 1 == false) then {
 			//titleText [format ["%1 has already been decontaminated!", _nearLoc], "PLAIN"];		
-			[["littleBirdMarker",300,(format ["%1 has already been decontaminated!", _nearLoc])],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+			[["littleBirdMarker",300,(format ["%1 has already been cleared!", _nearLoc])],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 			//add action back to heli
 			//[littleBird,["Airborne DECON", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","true",5,false,"",""]] remoteExec ["addAction",-2];
 			//[[LittleBirdArmed],"littleBirdAddAction.sqf"] remoteExec ["BIS_fnc_execVM",0];
@@ -48,7 +43,7 @@ if(isServer) then {
 			//if((InfectionRate select _locIndex) < 0.81) then {
 			if((ZoneArray select _locIndex select 2) < 0.81) then {
 				//titleText ["The infection is already below the airborne decontamination threashold!", "PLAIN"];			
-				[["littleBirdMarker",300,"The infection is already below the airborne decontamination threashold!"],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];			
+				[["littleBirdMarker",300,"The infection is already below the attraction threshold!"],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];			
 				
 				//add action back to heli
 				//[littleBird,["Airborne DECON", {["littleBirdDecon.sqf"] remoteExec ["BIS_fnc_execVM",0];},nil,1.5,FALSE,true,"","true",5,false,"",""]] remoteExec ["addAction",-2];
@@ -62,7 +57,7 @@ if(isServer) then {
 					private _locIndex = _this select 0;
 					private _nearLoc = _this select 1;
 
-					[[_nearLoc,300,"Beginning airborne DECON process... Once started, hold steady for 20 seconds..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+					[[_nearLoc,300,"Beginning Flood attraction process... Once started, hold steady for 20 seconds..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 					sleep 5;
 					
 					_deconShell_1 = "SmokeShell" createVehicle (position littleBird);
@@ -94,7 +89,7 @@ if(isServer) then {
 							publicVariable "LittleBirdArmed";
 							
 							//inform area and set failure
-							[[_nearLoc,300,"Helicopter is too far outside the contaminated area. Rearm decontaminate at base and try again..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+							[[_nearLoc,300,"Helicopter is too far outside the contaminated area. Rearm flood attractors at base and try again..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 							_airDeconFail = true;
 
 							
@@ -110,11 +105,10 @@ if(isServer) then {
 							
 								//set infection rate to 81%
 								ZoneArray select _locIndex set [2, 0.81];
-								//InfectionRate set [_locIndex, 0.81];
 								
 								
 								//inform success
-								[[_nearLoc,300,"Airborne decontamination successful. RTB to rearm decontaminate."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+								[[_nearLoc,300,"Flood attraction successful. RTB to rearm flood attractors."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 							};
 						};
 

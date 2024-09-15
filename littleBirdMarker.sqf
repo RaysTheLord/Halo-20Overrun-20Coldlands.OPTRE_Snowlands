@@ -13,10 +13,8 @@ while {true} do { //moves markers defines in editor to the position of vehicle e
 		//recreate marker
 		createMarker ["littleBirdMarker",littleBird];
 		"littleBirdMarker" setMarkerType "mil_triangle";
-		"littleBirdMarker" setMarkerText "Little Bird";
+		"littleBirdMarker" setMarkerText "Falcon";
 		"littleBirdMarker"setMarkerAlpha 0.7;
-		
-		//"littleBirdMarker" setmarkerpos getpos littleBird; 
 	};
 	
 	//wait 10 seconds

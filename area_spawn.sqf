@@ -40,7 +40,7 @@ _infectionHoldRate = ZoneArray select _locationIndex select 2;
 while{ZoneArray select _locationIndex select 3 == true} do{ 		
 	//check if isInfected is still true
 	_isInfected = ZoneArray select _locationIndex select 1;
-	if(_isInfected) then {
+	if(_isInfected) then {        
 		//get updated infection rate and value to change to per kill
 		//_infectionRate = InfectionRate select _locationIndex;		
 		_infectionRate = ZoneArray select _locationIndex select 2;

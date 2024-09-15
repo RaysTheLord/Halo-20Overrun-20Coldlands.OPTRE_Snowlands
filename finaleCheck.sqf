@@ -9,8 +9,6 @@ diag_log "Running Finale Check";
 _victoryPercent = ["PercentToVictory", 100] call BIS_fnc_getParamValue;
 
 //get full list and count of ZoneArray indexes currently created in Overrun
-//_currrentZones = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-//_victoryZoneCount = (count _currrentZones) * _victoryPercent;
 _victoryZoneCount = (count ZoneArray) * _victoryPercent;
 
 //value to hold total number of deconed zones
@@ -31,11 +29,15 @@ diag_log format ["%1 out of %2 zones deconed",_totalDeconed,_victoryZoneCount];
 
 //If all zones are deconed, _totalDeconed will equal _victoryZoneCount and the finale event will open up
 if (_totalDeconed >= _victoryZoneCount) then {
+    execVM "victory.sqf";
+    
+    //NO FINALE FOR NOW
+    /*
 	//check if finale is enabled in params
 	private _doFinale = ["DoFinale", 0] call BIS_fnc_getParamValue;
 	if (_doFinale) then {
 		//Notify all players
-		[["The Infection level is finally low enough. Let's finish this...", "PLAIN"]] remoteExec ["titleText", 0];
+		[["The Flood infestation has almost been destroyed. Finish the fight.", "PLAIN"]] remoteExec ["titleText", 0];
 		
 		sleep 3;
 		
@@ -43,7 +45,7 @@ if (_totalDeconed >= _victoryZoneCount) then {
 		["TaskAssigned", ["", format ["Decontaminate the Infection source at the old Military Base"]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];
 		
 		//change area warning to draw the players in
-		"finaleWarning" setMarkerText "DECONTAMINATE THE SOURCE";
+		"finaleWarning" setMarkerText "DESTROY THE LAST OF THE FLOOD";
 		
 		
 		//set FinaleReady variable to ensure access to the final area
@@ -53,4 +55,5 @@ if (_totalDeconed >= _victoryZoneCount) then {
 		//if finale is disabled, simply generate victory
 		execVM "victory.sqf";
 	};
+    */
 };

@@ -237,7 +237,7 @@ publicVariable "MissionMarkers";
 diag_log format ["Added Reinfection marker %1 to mission marker list: %2",_markerName, MissionMarkers];
 
 //Notify players of horde
-["TaskAssigned", ["", format ["A horde is moving from %1 to %2 to reinfect the zone!", _originZone, _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];
+["TaskAssigned", ["", format ["The Flood is moving from %1 to %2 to reinfect the zone!", _originZone, _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];
 
 //start while(group exists) loop
 while {alive leader _temp_Group} do {
@@ -302,7 +302,7 @@ diag_log format ["** Ending reinfection horde mission. Mission End Result: %1", 
 //check what result was
 switch (_missionEndResult) do
 {
-	case 0: {["TaskSucceeded", ["", format ["Horde has been destroyed! %1 no longer under threat", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 	//players eliminated horde
-	case 1: {["TaskFailed", ["", format ["Horde has reinfected %1!", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 									//horde reinfected zone
-	case 2: {["TaskFailed", ["", format ["%1 has already been reinfected! Horde is dispersed", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 		//zone already reinfected
+	case 0: {["TaskSucceeded", ["", format ["Flood horde has been destroyed! %1 no longer under threat", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 	//players eliminated horde
+	case 1: {["TaskFailed", ["", format ["The Flood have reinfected %1!", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 									//horde reinfected zone
+	case 2: {["TaskFailed", ["", format ["%1 has already been reinfected! Flood have dispersed.", _targetZone]]] remoteExec ['BIS_fnc_showNotification',0,FALSE];}; 		//zone already reinfected
 };

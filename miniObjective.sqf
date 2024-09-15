@@ -92,40 +92,28 @@ if (isServer) then {
 	
 	//boss Z
 	if(_miniObj == 0) then {
-		//select a demon
-		_demonSelect = selectRandom DemonList;
-		
-		//create group to put demon in
-		private _bossGroup = createGroup[EAST,true]; 
-
-		//spawn the demon
-		_bossZ = _bossGroup createUnit[_demonSelect,  _currentLoc, [], 5, "NONE"];
-
-		//set demon to defend point ***add patrol possibility
-		//[_bossGroup, _currentLoc] call BIS_fnc_taskDefend;
-		
-		//set demon to defend point or patrol
-		switch (selectRandom[0,0,1]) do {
-			case 0: {[_bossGroup, _currentLoc] call BIS_fnc_taskDefend};
-			case 1: {[_bossGroup, _currentLoc,20] call BIS_fnc_taskPatrol};
-		};//end switch	
-
-		//add index to zombie unit
-		_bossZ setVariable ["_bossLocationIndex", _locationIndex, true];
-
-		//create marker to show research location
+        //Flood objective
+        _flood_objects = ["dev_flood_ball", "dev_flood_rock"];
+        
+        //Spawn it on the objective
+        _gravemind = (selectRandom _flood_objects) createVehicle _currentLoc;
+        
+        //add index to gravemind
+		_gravemind setVariable ["_bossLocationIndex", _locationIndex, true];
+        
+        //create marker to show the Gravemind
 		createMarker ["_bossZMarker", _currentLoc];
 		
 		//make marker visible
 		"_bossZMarker" setMarkerShape "ELLIPSE";
 		"_bossZMarker" setMarkerColor "ColorRed";	
 		"_bossZMarker" setMarkerSize [10,10];
-		"_bossZMarker" setMarkerText "Strong Z Detected";		
+		"_bossZMarker" setMarkerText "Proto-Gravemind Forming";		
 		
-		[_bossZ,_locationIndex] remoteExec ["fnc_bossZMarker",2];
-		
+		[_gravemind,_locationIndex] remoteExec ["fnc_bossZMarker",2];
+
 		//log
-		diag_log format ["Boss Zombie created near %1", ZoneArray select _locationIndex select 0];
+		diag_log format ["Proto-Gravemind created near %1", ZoneArray select _locationIndex select 0];
 			
 			fnc_bossZMarker = {
 				params ["_bossZ"];
@@ -138,41 +126,77 @@ if (isServer) then {
 					sleep 10;
 				};
 			};
-		
-		//add eventhandled to end objective
-		_bossZ addEventHandler ["killed", {
-			_bossZ = _this select 0;
-			//get point boss is connected to 
-			private _locationIndex = _bossZ getVariable "_bossLocationIndex";
-			
-			//set the objective variable to false
-			ZoneArray select _locationIndex set [4, false];
-			
-			//set infection rate lower to prevent mission happening again
-			ZoneArray select _locationIndex set [2, (ZoneArray select _locationIndex select 2) - 0.01];
-			
-			//inform nearby players
-			private _messageMarker = ZoneArray select _locationIndex select 0;
-			[[_messageMarker,500,"Big Flood is down. Carry on with the mission."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];		
+        
+        //Handler to kill the Proto-Gravemind
+        [
+            _gravemind,														// Object the action is attached to
+            "Destroy Proto_gravemind",													// Title of the action
+            "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_forceRespawn_ca.paa",	// Idle icon shown on screen
+            "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_forceRespawn_ca.paa",	// Progress icon shown on screen
+            "_this distance _target < 3",									// Condition for the action to be shown
+            "_caller distance _target < 3",									// Condition for the action to progress
+            {},																// Code executed when action starts
+            {},																// Code executed on every progress tick
+            { 
+                deleteVehicle _target;  
+                private _locationIndex = _target getVariable "_bossLocationIndex";
 
-			//subtract a point of infection so the objective doesn't proc again
-			private _currentInfection = ZoneArray select _locationIndex select 2;
-			_currentInfection = _currentInfection - 0.014;
-			ZoneArray select _locationIndex set [2, _currentInfection];
-			
-			//add 10 currency into faction bank
-			[[10],"addToBank.sqf"] remoteExec ["BIS_fnc_execVM",2];
-			deleteMarker "_bossZMarker";		
+                //set the objective variable to false
+                ZoneArray select _locationIndex set [4, false];
 
-			//log
-			diag_log format ["Boss Zombie defeated at %1", ZoneArray select _locationIndex select 0];
-		}];
+                //set infection rate lower to prevent mission happening again
+                ZoneArray select _locationIndex set [2, (ZoneArray select _locationIndex select 2) - 0.01];
+
+                //inform nearby players
+                private _messageMarker = ZoneArray select _locationIndex select 0;
+                [[_messageMarker,500,"Proto-Gravemind destroyed. Carry on with the mission."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];		
+
+                //subtract a point of infection so the objective doesn't proc again
+                private _currentInfection = ZoneArray select _locationIndex select 2;
+                _currentInfection = _currentInfection - 0.014;
+                ZoneArray select _locationIndex set [2, _currentInfection];
+
+                //add 10 currency into faction bank
+                [[10],"addToBank.sqf"] remoteExec ["BIS_fnc_execVM",2];
+                deleteMarker "_bossZMarker";		
+
+                //log
+                diag_log format ["Proto-Gravemind destroyed at %1", ZoneArray select _locationIndex select 0];
+
+            },							// Code executed on completion
+            {},																// Code executed on interrupted
+            [],																// Arguments passed to the scripts as _this select 3
+            12,																// Action duration in seconds
+            0,																// Priority
+            true,															// Remove on completion
+            false															// Show in unconscious state
+        ] remoteExec ["BIS_fnc_holdActionAdd", 0, _gravemind];				// MP-compatible implementation
+        
+        
+        //Defenders
+        _num_defenders = 6;
+        
+        //create group to put demon in
+		private _bossGroup = createGroup[EAST,true]; 
+
+        for "_i" from 1 to _num_defenders do {
+            //select a demon
+            _demonSelect = selectRandom DemonList; 
+            //spawn the demon
+            _flood = _bossGroup createUnit[_demonSelect,  _currentLoc, [], 5, "NONE"];
+        };
 		
+		//set demon to defend point or patrol
+		switch (selectRandom[0,0,1]) do {
+			case 0: {[_bossGroup, _currentLoc] call BIS_fnc_taskDefend};
+			case 1: {[_bossGroup, _currentLoc,20] call BIS_fnc_taskPatrol};
+		};//end switch	
+
 		//set mission as active in this location
 		ZoneArray select _locationIndex set [4, true];
 		
 		//inform players		
-		[["_bossZMarker",500,"A singularly strong Flood has been detected in your area. Kill it to reduce the infection..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+		[["_bossZMarker",500,"The Flood are creating a Proto-Gravemind in your area. Destroy it to reduce infection."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 	};
 	
 	
@@ -209,14 +233,14 @@ if (isServer) then {
 				ZoneArray select _locationIndex set [4, false];
 				//set infection rate lower to prevent mission happening again
 				ZoneArray select _locationIndex set [2, (ZoneArray select _locationIndex select 2) - 0.01];
-			   [["_zMarker",300,"Looks like you've neutralized the horde there. Keep working on clearing the rest of the area."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+			   [["_zMarker",300,"Looks like you've neutralized the Flood there. Keep working on clearing the rest of the area."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 			   sleep 0.5;
 			   deleteMarker "_zMarker";
 			   //add 10 currency into faction bank
 				[[10],"addToBank.sqf"] remoteExec ["BIS_fnc_execVM",2];
 				
 				//log
-				diag_log format ["Zombie eliminated %1", ZoneArray select _locationIndex select 0];
+				diag_log format ["Flood eliminated %1", ZoneArray select _locationIndex select 0];
 			   
 			};//end zGroupWatch
 			
@@ -248,7 +272,7 @@ if (isServer) then {
 		"_zMarker" setMarkerShape "ELLIPSE";
 		"_zMarker" setMarkerColor "ColorRed";	
 		"_zMarker" setMarkerSize [25,25];
-		"_zMarker" setMarkerText "Significant Z Presence";
+		"_zMarker" setMarkerText "Significant Flood Presence";
 		
 		//set mission as active in this location
 		ZoneArray select _locationIndex set [4, true];
@@ -329,7 +353,7 @@ if (isServer) then {
 			deleteVehicle _researchObject; 
 			//alert players mission is over
 			private _messageMarker = ZoneArray select _locationIndex select 0;
-			[[_messageMarker,500,"Thanks, we'll begin analyzing this now. Continue the clean-up."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];	
+			[[_messageMarker,500,"Collected for analysis. Continue the clean-up."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];	
 			sleep 0.5;
 			deleteMarker "_intelMarker";
 			//add 10 currency into faction bank

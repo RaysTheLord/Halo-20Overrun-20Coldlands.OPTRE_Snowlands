@@ -3,11 +3,11 @@
 */
 sleep 2;
 
-[["You've done it... Malden has been cleansed of the zombie menace!", "PLAIN"]] remoteExec ["titleText", 0];
+[["It's finished. The Flood have been eradicated from the area.", "PLAIN"]] remoteExec ["titleText", 0];
 
 sleep 5;
 
-[["Thank you for testing the Malden Overrun Alpha!\nPlease give UselessFodder your feedback to improve this scenario!\nYou can find him at discord.gg/UselessFodder or on socials", "PLAIN"]] remoteExec ["titleText", 0];
+[["Thank you for playing Flood Overrun Alpha!\nPlease give UselessFodder and Ray your feedback to improve this scenario!\nYou can find them at discord.gg/UselessFodder or on socials", "PLAIN"]] remoteExec ["titleText", 0];
 
 sleep 5;
 

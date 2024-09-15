@@ -39,16 +39,6 @@ private _location = ZoneArray select _locationIndex select 0;
 	//array to hold current number of Zs
 	private _numZ = nil;
 
-	/* Old PLS DELETE***
-		//get all markers within 100m, but more than 20m from deconTruck
-		{
-			_currentDistance = deconTruck distance getMarkerPos _x;
-			if (_currentDistance > 20 && _currentDistance < 101) then {
-				_spawnLocs pushBack _x;
-			};	
-
-		} forEach allMapMarkers;
-	*/
 	
 	//create spawnpoints > 50m and <75m away from truck
 	//select a position for new group and ensure it's more than 20m from the party
@@ -57,7 +47,6 @@ private _location = ZoneArray select _locationIndex select 0;
 	private _minimumDistance = 50;
 	private _maximumDistance = 75;
 	private _currentSpawn = [ZoneArray select _locationIndex select 0, false] call CBA_fnc_randPosArea;
-	private _debugMarkerNumber = 0; //DEBUG PLS DELETE***
 	
 	while {(count _spawnLocs) < (_maxZ/2)} do {
 		//select random spawnpoint
@@ -65,16 +54,7 @@ private _location = ZoneArray select _locationIndex select 0;
 		private _saveSpawn = _startSpawn findEmptyPosition [0,10];
 		
 		//push into spawnLocs
-		_spawnLocs pushBack _saveSpawn;
-		
-		//DEBUG DELETE***		
-		_debugMarkerName = format ["debugMarker_%1", _debugMarkerNumber];
-		_debugMarker = createMarker [_debugMarkerName, _saveSpawn]; // Not visible yet.
-		//_debugMarkerName setMarkerType "hd_dot"; // Visible.
-		//_debugMarkerName setMarkerColor "ColorRed";
-		diag_log format ["New Decon Position: %1 at %2",_debugMarkerName, _saveSpawn];
-		_debugMarkerNumber = _debugMarkerNumber + 1;
-				
+		_spawnLocs pushBack _saveSpawn;				
 	};
 	
 	//get start amount of zombies
@@ -96,12 +76,11 @@ while{CleanseActive} do {
 		//kill timer & refresh hint
 		[-1] call BIS_fnc_countdown;
 		//inform the user
-		[["deconTruckMarker",300,"DECON Vehicle destroyed. Area is not decontaminated..."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+		[["deconTruckMarker",300,"DECON Vehicle destroyed. Flood attraction halted."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 		//log
 		diag_log "DECON truck destroyed. Cleaning";	
 		//clear timer
 		[["deconTruckMarker",300,"", _location],"hintNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
-		//titleText ["DECON Vehicle destroyed. Area is not decontaminated...", "PLAIN"];
 		
 		//remove driver
 		deleteVehicle _deconMan;
@@ -117,22 +96,11 @@ while{CleanseActive} do {
 		//***[["Cleanup initiated", "PLAIN"]] remoteExec ["titleText", 0];
 			if(isServer) then {
 				diag_log "DECON complete. Begining clean up";	
-				//*** ["Time complete", "PLAIN"] remoteExec ["titleText", 0];				
 				//set area to no longer infected
 				ZoneArray select _locationIndex set [1, false];				
-				
-				
-				//kill all zombies in area
-				_killZ = {_x inArea _location && side _x == east} count allunits;
-				
+								
 				//inform users
-				[["deconTruckMarker",300,format ["Area %1 successfully decontaminated.", _location]],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
-				
-				{
-					if(_x inArea _location && side _x == east) then {
-						_x setDamage 1;
-					};
-				} forEach allunits;
+				[["deconTruckMarker",300,format ["All Flood forms uprooted from Area %1.", _location]],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 				
 				//unlock truck and delete deconMan
 				deconTruck lock false;
@@ -152,10 +120,7 @@ while{CleanseActive} do {
 				publicVariable "CleanseActive";
 				
 				//check if this is the final zone for victory
-				execVM "victoryCheck.sqf";
-				
-				//check to see if finale is unlocked
-				//execVM "finaleCheck.sqf";
+				execVM "finaleCheck.sqf";
 				
 			};
 			
@@ -163,7 +128,7 @@ while{CleanseActive} do {
 		
 		}else { //if timer is not complete, update hintSilent and spawn more zombies
 			//update hint
-			[["deconTruckMarker",300,format ["%1 seconds until DECON", floor _timeLeft], _location],"hintNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+			[["deconTruckMarker",300,format ["ETA: %1 seconds until all Flood forms active.", floor _timeLeft], _location],"hintNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
 			
 			if(isServer) then {		
 				//get Z count
