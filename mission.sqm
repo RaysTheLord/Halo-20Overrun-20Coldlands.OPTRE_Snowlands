@@ -16,10 +16,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={5616.3745,145.02454,3305.8325};
-		dir[]={-0.23912938,-0.58047986,-0.77838397};
-		up[]={-0.17046843,0.81427312,-0.55488735};
-		aside[]={-0.95591778,-1.9936124e-008,0.29366863};
+		pos[]={5602.4355,152.55258,3285.2593};
+		dir[]={-0.55566609,-0.3828041,-0.73803622};
+		up[]={-0.2302497,0.92382962,-0.30581781};
+		aside[]={-0.79888803,-3.7311111e-08,0.60148162};
 	};
 };
 binarizationWanted=0;
@@ -33,13 +33,9 @@ addons[]=
 	"A3_Structures_F_Argo_Military_Fortifications",
 	"A3_Structures_F_Mil_BagFence",
 	"A3_Structures_F_Walls",
-	"ace_sitting",
 	"A3_Structures_F_Civ_Accessories",
 	"A3_Structures_F_EPA_Items_Vessels",
 	"A3_Structures_F_Items_Food",
-	"ace_interaction",
-	"ace_cargo",
-	"ace_dragging",
 	"A3_Structures_F_Heli_Items_Airport",
 	"A3_Structures_F_Heli_Items_Food",
 	"A3_Structures_F_Bootcamp_Items_Food",
@@ -63,7 +59,7 @@ class AddonsMetaData
 {
 	class List
 	{
-		items=24;
+		items=20;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -108,112 +104,84 @@ class AddonsMetaData
 		};
 		class Item6
 		{
-			className="ace_sitting";
-			name="ACE3 - Sitting";
-			author="ACE-Team";
-			url="https://ace3.acemod.org/";
-		};
-		class Item7
-		{
-			className="ace_interaction";
-			name="ACE3 - Interaction";
-			author="ACE-Team";
-			url="https://ace3.acemod.org/";
-		};
-		class Item8
-		{
-			className="ace_cargo";
-			name="ACE3 - Cargo";
-			author="ACE-Team";
-			url="https://ace3.acemod.org/";
-		};
-		class Item9
-		{
-			className="ace_dragging";
-			name="ACE3 - Dragging";
-			author="ACE-Team";
-			url="https://ace3.acemod.org/";
-		};
-		class Item10
-		{
 			className="A3_Structures_F_Heli";
 			name="Arma 3 Helicopters - Buildings and Structures";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item11
+		class Item7
 		{
 			className="A3_Structures_F_Bootcamp";
 			name="Arma 3 Bootcamp Update - Buildings and Structures";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item12
+		class Item8
 		{
 			className="A3_Structures_F_Enoch";
 			name="Arma 3 Contact Platform - Buildings and Structures";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item13
+		class Item9
 		{
 			className="OPTRE_FC_Units";
 			name="OPTRE_FC_Units_Marines";
 			author="Article 2 Studios";
 		};
-		class Item14
+		class Item10
 		{
 			className="A3_Modules_F_Curator";
 			name="Arma 3 Zeus Update - Scripted Modules";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item15
+		class Item11
 		{
 			className="A3_Modules_F";
 			name="Arma 3 Alpha - Scripted Modules";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item16
+		class Item12
 		{
 			className="OPTRE_Core";
 			name="OPTRE_Weapons_M247H";
 			author="Article 2 Studios";
 		};
-		class Item17
+		class Item13
 		{
 			className="OPTRE_Vehicles";
 			name="OPTRE_Vehicles_Misc";
 			author="Article 2 Studios";
 		};
-		class Item18
+		class Item14
 		{
 			className="OPTRE_UNSC_Structure_Containers";
 			name="OPTRE_UNSC_Structure_Containers";
 		};
-		class Item19
+		class Item15
 		{
 			className="OPTRE_Buildings_City_Lights";
 			name="OPTRE_Buildings_City_Lights";
 		};
-		class Item20
+		class Item16
 		{
 			className="OPTRE_UNSC_Structure_Military";
 			name="OPTRE_UNSC_Structure_Military";
 		};
-		class Item21
+		class Item17
 		{
 			className="OPTRE_MJOLNIR_Units";
 			name="OPTRE_MJOLNIR_Units";
 			author="Article 2 Studios";
 		};
-		class Item22
+		class Item18
 		{
 			className="OPTRE_BW_Buildings";
 			name="OPTRE_BW_DoorConsole";
 		};
-		class Item23
+		class Item19
 		{
 			className="OPTRE_Buildings_Camp";
 			name="OPTRE_Buildings_Camp";
@@ -234,6 +202,10 @@ class ScenarioData
 {
 	author="FerociousRay";
 	disabledAI=1;
+	class Header
+	{
+		gameType="Coop";
+	};
 };
 class CustomAttributes
 {
@@ -272,7 +244,7 @@ class CustomAttributes
 		class Attribute0
 		{
 			property="ENH_AddObjectsToZeus";
-			expression="    if (!is3DEN && isServer && _value && !(allCurators isEqualTo [])) then    {      0 spawn      {        scriptName 'ENH_Attribute_AddObjectsToZeus';        while {true} do        {          {          _x addCuratorEditableObjects            [              entities [[], ['Logic'], true],              true            ];          } count allCurators;          sleep 60;        };      };    }";
+			expression="        if (!is3DEN && isServer && _value) then        {            private _objects = allMissionObjects '';            allCurators apply {_x addCuratorEditableObjects [_objects, true]};            addMissionEventHandler ['EntityCreated',            {                params ['_entity'];                allCurators apply {_x addCuratorEditableObjects [[_entity], true]};            }];        }";
 			class Value
 			{
 				class data
@@ -360,7 +332,7 @@ class Mission
 			type="Empty";
 			alpha=0.69999999;
 			id=5;
-			atlOffset=-1.5258789e-005;
+			atlOffset=-1.5258789e-05;
 		};
 		class Item4
 		{
@@ -685,7 +657,7 @@ class Mission
 			};
 			id=37;
 			type="Land_PortableLight_single_F";
-			atlOffset=1.5258789e-005;
+			atlOffset=1.5258789e-05;
 		};
 		class Item24
 		{
@@ -755,7 +727,7 @@ class Mission
 			type="Empty";
 			angle=132.45697;
 			id=43;
-			atlOffset=1.5258789e-005;
+			atlOffset=1.5258789e-05;
 		};
 		class Item29
 		{
@@ -803,7 +775,7 @@ class Mission
 			a=175;
 			b=175;
 			id=50;
-			atlOffset=-3.0517578e-005;
+			atlOffset=-3.0517578e-05;
 		};
 		class Item33
 		{
@@ -890,7 +862,7 @@ class Mission
 			colorName="ColorWEST";
 			alpha=0.69999999;
 			id=59;
-			atlOffset=1.5258789e-005;
+			atlOffset=1.5258789e-05;
 		};
 		class Item40
 		{
@@ -917,7 +889,7 @@ class Mission
 			};
 			id=62;
 			type="Land_SandbagBarricade_01_half_F";
-			atlOffset=1.5258789e-005;
+			atlOffset=1.5258789e-05;
 		};
 		class Item42
 		{
@@ -935,7 +907,7 @@ class Mission
 			};
 			id=63;
 			type="Land_SandbagBarricade_01_half_F";
-			atlOffset=3.0517578e-005;
+			atlOffset=3.0517578e-05;
 		};
 		class Item43
 		{
@@ -953,7 +925,7 @@ class Mission
 			};
 			id=64;
 			type="Land_SandbagBarricade_01_half_F";
-			atlOffset=1.5258789e-005;
+			atlOffset=1.5258789e-05;
 		};
 		class Item44
 		{
@@ -1137,7 +1109,7 @@ class Mission
 			text="Forerunner Outpost 1";
 			type="mil_flag";
 			id=102;
-			atlOffset=-9.1552734e-005;
+			atlOffset=-9.1552734e-05;
 		};
 		class Item57
 		{
@@ -1193,19 +1165,6 @@ class Mission
 						};
 						class Attribute1
 						{
-							property="ace_isEngineer";
-							expression="if !(_value == ([0, 1] select (_this getUnitTrait 'engineer')) || {_value == -1}) then {_this setVariable ['ace_isEngineer', _value, true]}";
-							class Value
-							{
-								class data
-								{
-									singleType="SCALAR";
-									value=1;
-								};
-							};
-						};
-						class Attribute2
-						{
 							property="speaker";
 							expression="_this setspeaker _value;";
 							class Value
@@ -1217,7 +1176,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute3
+						class Attribute2
 						{
 							property="pitch";
 							expression="_this setpitch _value;";
@@ -1230,7 +1189,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute4
+						class Attribute3
 						{
 							property="ammoBox";
 							expression="[_this,_value] call bis_fnc_initAmmoBox;";
@@ -1243,7 +1202,7 @@ class Mission
 								};
 							};
 						};
-						nAttributes=5;
+						nAttributes=4;
 					};
 				};
 				class Item1
@@ -1407,19 +1366,6 @@ class Mission
 						};
 						class Attribute1
 						{
-							property="ace_isEngineer";
-							expression="if !(_value == ([0, 1] select (_this getUnitTrait 'engineer')) || {_value == -1}) then {_this setVariable ['ace_isEngineer', _value, true]}";
-							class Value
-							{
-								class data
-								{
-									singleType="SCALAR";
-									value=1;
-								};
-							};
-						};
-						class Attribute2
-						{
 							property="speaker";
 							expression="_this setspeaker _value;";
 							class Value
@@ -1431,7 +1377,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute3
+						class Attribute2
 						{
 							property="pitch";
 							expression="_this setpitch _value;";
@@ -1444,7 +1390,7 @@ class Mission
 								};
 							};
 						};
-						nAttributes=4;
+						nAttributes=3;
 					};
 				};
 				class Item4
@@ -1868,7 +1814,7 @@ class Mission
 					};
 					id=218;
 					type="OPTRE_FC_Marines_Soldier_Unarmed";
-					atlOffset=-1.5258789e-005;
+					atlOffset=-1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1886,19 +1832,6 @@ class Mission
 						};
 						class Attribute1
 						{
-							property="ace_isEngineer";
-							expression="if !(_value == ([0, 1] select (_this getUnitTrait 'engineer')) || {_value == -1}) then {_this setVariable ['ace_isEngineer', _value, true]}";
-							class Value
-							{
-								class data
-								{
-									singleType="SCALAR";
-									value=1;
-								};
-							};
-						};
-						class Attribute2
-						{
 							property="speaker";
 							expression="_this setspeaker _value;";
 							class Value
@@ -1910,7 +1843,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute3
+						class Attribute2
 						{
 							property="pitch";
 							expression="_this setpitch _value;";
@@ -1923,7 +1856,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute4
+						class Attribute3
 						{
 							property="ammoBox";
 							expression="[_this,_value] call bis_fnc_initAmmoBox;";
@@ -1936,7 +1869,7 @@ class Mission
 								};
 							};
 						};
-						nAttributes=5;
+						nAttributes=4;
 					};
 				};
 				class Item1
@@ -1975,19 +1908,6 @@ class Mission
 						};
 						class Attribute1
 						{
-							property="ace_isEngineer";
-							expression="if !(_value == ([0, 1] select (_this getUnitTrait 'engineer')) || {_value == -1}) then {_this setVariable ['ace_isEngineer', _value, true]}";
-							class Value
-							{
-								class data
-								{
-									singleType="SCALAR";
-									value=1;
-								};
-							};
-						};
-						class Attribute2
-						{
 							property="speaker";
 							expression="_this setspeaker _value;";
 							class Value
@@ -1999,7 +1919,7 @@ class Mission
 								};
 							};
 						};
-						class Attribute3
+						class Attribute2
 						{
 							property="pitch";
 							expression="_this setpitch _value;";
@@ -2012,7 +1932,7 @@ class Mission
 								};
 							};
 						};
-						nAttributes=4;
+						nAttributes=3;
 					};
 				};
 				class Item2
@@ -2096,7 +2016,7 @@ class Mission
 					};
 					id=221;
 					type="OPTRE_FC_Marines_Soldier_Unarmed";
-					atlOffset=1.5258789e-005;
+					atlOffset=1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -2283,7 +2203,7 @@ class Mission
 					};
 					id=224;
 					type="OPTRE_FC_Marines_Soldier_Unarmed";
-					atlOffset=1.5258789e-005;
+					atlOffset=1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -2346,7 +2266,7 @@ class Mission
 					};
 					id=225;
 					type="OPTRE_FC_Marines_Soldier_Unarmed";
-					atlOffset=1.5258789e-005;
+					atlOffset=1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -2471,7 +2391,7 @@ class Mission
 					};
 					id=227;
 					type="OPTRE_FC_Marines_Soldier_Unarmed";
-					atlOffset=1.5258789e-005;
+					atlOffset=1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -2521,7 +2441,7 @@ class Mission
 			{
 			};
 			id=121;
-			atlOffset=-1.5258789e-005;
+			atlOffset=-1.5258789e-05;
 			class CustomAttributes
 			{
 				class Attribute0
@@ -2644,7 +2564,7 @@ class Mission
 			type="Empty";
 			angle=41.510067;
 			id=138;
-			atlOffset=-1.5258789e-005;
+			atlOffset=-1.5258789e-05;
 		};
 		class Item65
 		{
@@ -3713,7 +3633,7 @@ class Mission
 			};
 			id=189;
 			type="Land_Small_Light_Column";
-			atlOffset=-1.5258789e-005;
+			atlOffset=-1.5258789e-05;
 		};
 		class Item89
 		{
@@ -3794,7 +3714,7 @@ class Mission
 			};
 			id=194;
 			type="Land_OPTRE_generator";
-			atlOffset=-1.5258789e-005;
+			atlOffset=-1.5258789e-05;
 		};
 		class Item94
 		{
@@ -4055,7 +3975,7 @@ class Mission
 					};
 					id=234;
 					type="OPTRE_Spartan3_Soldier";
-					atlOffset=1.5258789e-005;
+					atlOffset=1.5258789e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -4227,18 +4147,18 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={5596.7583,143.47508,3279.1729};
-				angles[]={0.049961641,0.63919193,0.01999305};
+				position[]={5596.7578,143.47569,3279.1733};
+				angles[]={0.049968775,0.63919193,0.020001473};
 			};
 			side="Empty";
 			flags=4;
 			class Attributes
 			{
+				init="if (isClass (configFile >> ""CfgPatches"" >> ""ace_common"")) then { " \n "    [this, true] call ace_arsenal_fnc_initBox; " \n "} else { " \n "    [""AmmoboxInit"", [this, true, { _this distance _target  < 10 }]] call BIS_fnc_arsenal; " \n "}";
 				name="arsenalBox";
 			};
 			id=251;
 			type="OPTRE_Furniture_Locker";
-			atlOffset=-0.00064086914;
 			class CustomAttributes
 			{
 				class Attribute0
