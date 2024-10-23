@@ -139,29 +139,6 @@ if (isServer) then {
             {},																// Code executed on every progress tick
             { 
                 deleteVehicle _target;  
-                private _locationIndex = _target getVariable "_bossLocationIndex";
-
-                //set the objective variable to false
-                ZoneArray select _locationIndex set [4, false];
-
-                //set infection rate lower to prevent mission happening again
-                ZoneArray select _locationIndex set [2, (ZoneArray select _locationIndex select 2) - 0.01];
-
-                //inform nearby players
-                private _messageMarker = ZoneArray select _locationIndex select 0;
-                [[_messageMarker,500,"Proto-Gravemind destroyed. Carry on with the mission."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];		
-
-                //subtract a point of infection so the objective doesn't proc again
-                private _currentInfection = ZoneArray select _locationIndex select 2;
-                _currentInfection = _currentInfection - 0.014;
-                ZoneArray select _locationIndex set [2, _currentInfection];
-
-                //add 10 currency into faction bank
-                [[10],"addToBank.sqf"] remoteExec ["BIS_fnc_execVM",2];
-                deleteMarker "_bossZMarker";		
-
-                //log
-                diag_log format ["Proto-Gravemind destroyed at %1", ZoneArray select _locationIndex select 0];
 
             },							// Code executed on completion
             {},																// Code executed on interrupted
@@ -197,6 +174,33 @@ if (isServer) then {
 		
 		//inform players		
 		[["_bossZMarker",500,"The Flood are creating a Proto-Gravemind in your area. Destroy it to reduce infection."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];
+        
+        //Waituntil the gravemind is dead
+        waitUntil{sleep 0.5; !alive _gravemind};
+        //private _locationIndex = _gravemind getVariable "_bossLocationIndex";
+
+        //set the objective variable to false
+        ZoneArray select _locationIndex set [4, false];
+
+        //set infection rate lower to prevent mission happening again
+        ZoneArray select _locationIndex set [2, (ZoneArray select _locationIndex select 2) - 0.01];
+
+        //inform nearby players
+        private _messageMarker = ZoneArray select _locationIndex select 0;
+        [[_messageMarker,500,"Proto-Gravemind destroyed. Carry on with the mission."],"messageNear.sqf"] remoteExec ["BIS_fnc_execVM",0];		
+
+        //subtract a point of infection so the objective doesn't proc again
+        private _currentInfection = ZoneArray select _locationIndex select 2;
+        _currentInfection = _currentInfection - 0.014;
+        ZoneArray select _locationIndex set [2, _currentInfection];
+
+        //add 10 currency into faction bank
+        [[10],"addToBank.sqf"] remoteExec ["BIS_fnc_execVM",2];
+        deleteMarker "_bossZMarker";		
+
+        //log
+        diag_log format ["Proto-Gravemind destroyed at %1", ZoneArray select _locationIndex select 0];
+
 	};
 	
 	
