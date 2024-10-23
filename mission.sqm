@@ -16,10 +16,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={5602.4355,152.55258,3285.2593};
-		dir[]={-0.55566609,-0.3828041,-0.73803622};
-		up[]={-0.2302497,0.92382962,-0.30581781};
-		aside[]={-0.79888803,-3.7311111e-08,0.60148162};
+		pos[]={5599.9043,147.83739,3280.4548};
+		dir[]={-0.60205311,-0.49965516,-0.62280202};
+		up[]={-0.34727636,0.86622357,-0.35924447};
+		aside[]={-0.71898484,-3.6161509e-08,0.6950323};
 	};
 };
 binarizationWanted=0;
@@ -202,6 +202,8 @@ class ScenarioData
 {
 	author="FerociousRay";
 	disabledAI=1;
+	respawn=3;
+	respawnDelay=5;
 	class Header
 	{
 		gameType="Coop";
@@ -223,20 +225,41 @@ class CustomAttributes
 					singleType="ARRAY";
 					class value
 					{
-						items=1;
+						items=2;
 						class Item0
 						{
 							class data
 							{
 								singleType="STRING";
-								value="None";
+								value="MenuPosition";
+							};
+						};
+						class Item1
+						{
+							class data
+							{
+								singleType="STRING";
+								value="Counter";
 							};
 						};
 					};
 				};
 			};
 		};
-		nAttributes=1;
+		class Attribute1
+		{
+			property="ENH_saveLoadout";
+			expression="if (!isMultiplayer || !_value || is3DEN || !hasInterface) exitWith {};        0 spawn        {            waitUntil {sleep 1; !isNull player};            player setVariable ['ENH_savedLoadout', getUnitloadout player];            player addMPEventHandler ['MPRespawn',            {                params ['_unit'];                private _loadout = _unit getVariable ['ENH_savedLoadout', []];                if (_loadout isNotEqualTo []) then {_unit setUnitLoadout _loadout};            }];        };";
+			class Value
+			{
+				class data
+				{
+					singleType="BOOL";
+					value=1;
+				};
+			};
+		};
+		nAttributes=2;
 	};
 	class Category1
 	{
