@@ -115,17 +115,17 @@ if (isServer) then {
 		//log
 		diag_log format ["Proto-Gravemind created near %1", ZoneArray select _locationIndex select 0];
 			
-			fnc_bossZMarker = {
-				params ["_bossZ"];
-				
-				_bossZ = _this select 0;
-			
-				while {alive _bossZ} do {
-					"_bossZMarker" setMarkerPos getPos _bossZ;
-					
-					sleep 10;
-				};
-			};
+        fnc_bossZMarker = {
+            params ["_bossZ"];
+
+            _bossZ = _this select 0;
+
+            while {alive _bossZ} do {
+                "_bossZMarker" setMarkerPos getPos _bossZ;
+
+                sleep 10;
+            };
+        };
         
         //Handler to kill the Proto-Gravemind
         [
